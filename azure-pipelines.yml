@@ -57,7 +57,7 @@ stages:
               - task: DownloadSecureFile@1
                 name: sshkey
                 inputs:
-                  secureFile: 'aksprodsshkey.pub'
+                  secureFile: 'aks-terraform-devops-ssh-key-ububtu.pub'
               - task: TerraformCLI@1
                 inputs:
                   command: 'init'
