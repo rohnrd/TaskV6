@@ -39,3 +39,8 @@ stages:
             backendAzureRmContainerName: 'tfstatefiles-v45'
             backendAzureRmKey: 'aks-base.tfstate'
             allowTelemetryCollection: false 
+        - task: TerraformCLI@1
+          inputs:
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
+            allowTelemetryCollection: false
