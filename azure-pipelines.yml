@@ -44,3 +44,28 @@ stages:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
             allowTelemetryCollection: false
+  - stage: DeployAKSClusters
+    jobs:
+      - deployment: DeployDevAKSCluster
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: $(DEV_ENVIRONMENT)  
+        strategy:
+         runOnce:
+           deploy:
+             steps:
+              - task: DownloadSecureFile@1
+                name: sshkey
+                inputs:
+                  secureFile: 'aksprodsshkey.pub'
+              - task: TerraformCLI@1
+                inputs:
+                  command: 'init'
+                  workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                  backendType: 'azurerm'
+                  backendServiceArm: 'terraform-aks-azurerm-svc-con'
+                  backendAzureRmResourceGroupName: 'terraformstateronrg045'
+                  backendAzureRmStorageAccountName: 'terraformstoragerg045'
+                  backendAzureRmContainerName: 'tfstatefiles-v45'
+                  backendAzureRmKey: 'aks-$(DEV_ENVIRONMENT).tfstate'
+                  allowTelemetryCollection: false            
