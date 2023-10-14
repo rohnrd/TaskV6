@@ -69,10 +69,3 @@ stages:
                   backendAzureRmContainerName: 'tfstatefiles-v45'
                   backendAzureRmKey: 'aks-$(DEV_ENVIRONMENT).tfstate'
                   allowTelemetryCollection: false 
-              - task: TerraformCLI@1
-                inputs:
-                  command: 'plan'
-                  workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
-                  environmentServiceName: 'terraform-aks-azurerm-svc-con'
-                  commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
-                  allowTelemetryCollection: false               
