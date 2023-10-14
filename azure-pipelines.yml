@@ -27,3 +27,15 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
+           
+        - task: TerraformCLI@1
+          inputs:
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
+            backendType: 'azurerm'
+            backendServiceArm: 'terraform-aks-azurerm-svc-con'
+            backendAzureRmResourceGroupName: 'terraformstateronrg045'
+            backendAzureRmStorageAccountName: 'terraformstoragerg045'
+            backendAzureRmContainerName: 'tfstatefiles-v45'
+            backendAzureRmKey: 'aks-base.tfstate'
+            allowTelemetryCollection: false 
