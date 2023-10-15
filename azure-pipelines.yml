@@ -59,11 +59,6 @@ stages:
                 name: sshkey
                 inputs:
                   secureFile: 'aksprodsshkey.pub'
-              - task: PublishPipelineArtifact@1
-                inputs:
-                  targetPath: '$(System.DefaultWorkingDirectory)/kube-manifests'
-                  artifact: 'kube-manifests'
-                  publishLocation: 'pipeline'
               - task: TerraformCLI@1
                 inputs:
                   command: 'init'
