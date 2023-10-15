@@ -83,10 +83,7 @@ stages:
                   environmentServiceName: 'terraform-aks-azurerm-svc-con'
                   commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
-              - task: PublishPipelineArtifact@1
-                inputs:
-                  targetPath: '$(System.DefaultWorkingDirectory)/kube-manifests'
-                  artifact: 'kube-manifests'
-                  publishLocation: 'pipeline'
-              - bash: echo After copying to PublishPipelineArtifact; ls -R $(System.DefaultWorkingDirectory)/kube-manifests
+
+              - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
+              
               
