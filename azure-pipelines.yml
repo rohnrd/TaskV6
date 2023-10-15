@@ -1,0 +1,78 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- name: DEV_ENVIRONMENT
+  value: dev
+
+stages:
+  - stage: TerraformValidate
+    jobs:
+      - job: TerraformValidateJob
+        continueOnError: false
+        steps:
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)/'
+            artifact: 'terraform-manifests-out'
+            publishLocation: 'pipeline'
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
+           
+        - task: TerraformCLI@1
+          inputs:
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
+            backendType: 'azurerm'
+            backendServiceArm: 'terraform-aks-azurerm-svc-con'
+            backendAzureRmResourceGroupName: 'terraformstateronrg045'
+            backendAzureRmStorageAccountName: 'terraformstoragerg045'
+            backendAzureRmContainerName: 'tfstatefiles-v45'
+            backendAzureRmKey: 'aks-base.tfstate'
+            allowTelemetryCollection: false 
+        - task: TerraformCLI@1
+          inputs:
+            command: 'validate'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
+            allowTelemetryCollection: false
+  - stage: DeployAKSClusters
+    jobs:
+      - deployment: DeployDevAKSCluster
+        pool:
+          vmImage: 'ubuntu-latest'
+        environment: $(DEV_ENVIRONMENT)  
+        strategy:
+         runOnce:
+           deploy:
+             steps:
+              - task: DownloadSecureFile@1
+                name: sshkey
+                inputs:
+                  secureFile: 'aks-terraform-devops-ssh-key-ububtu.pub'
+              - task: TerraformCLI@1
+                inputs:
+                  command: 'init'
+                  workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
+                  backendType: 'azurerm'
+                  backendServiceArm: 'terraform-aks-azurerm-svc-con'
+                  backendAzureRmResourceGroupName: 'terraformstateronrg045'
+                  backendAzureRmStorageAccountName: 'terraformstoragerg045'
+                  backendAzureRmContainerName: 'tfstatefiles-v45'
+                  backendAzureRmKey: 'aks-$(DEV_ENVIRONMENT).tfstate'
+                  allowTelemetryCollection: false 
+              - task: TerraformCLI@1
+                inputs:
+                  command: 'plan'
+                  workingDirectory: '(Pipeline.Workspace)/terraform-manifests-out'
+                  environmentServiceName: 'terraform-aks-azurerm-svc-con'
+                  commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
+                  allowTelemetryCollection: false
