@@ -27,7 +27,6 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
-           
         - task: TerraformCLI@1
           inputs:
             command: 'init'
@@ -38,12 +37,13 @@ stages:
             backendAzureRmStorageAccountName: 'terraformstoragerg045'
             backendAzureRmContainerName: 'tfstatefiles-v45'
             backendAzureRmKey: 'aks-base.tfstate'
-            allowTelemetryCollection: false 
+            allowTelemetryCollection: false
         - task: TerraformCLI@1
           inputs:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
             allowTelemetryCollection: false
+
   - stage: DeployAKSClusters
     jobs:
       - deployment: DeployDevAKSCluster
@@ -57,7 +57,7 @@ stages:
               - task: DownloadSecureFile@1
                 name: sshkey
                 inputs:
-                  secureFile: 'aks-terraform-devops-ssh-key-ububtu.pub'
+                  secureFile: 'aksprodsshkey.pub'
               - task: TerraformCLI@1
                 inputs:
                   command: 'init'
@@ -68,11 +68,11 @@ stages:
                   backendAzureRmStorageAccountName: 'terraformstoragerg045'
                   backendAzureRmContainerName: 'tfstatefiles-v45'
                   backendAzureRmKey: 'aks-$(DEV_ENVIRONMENT).tfstate'
-                  allowTelemetryCollection: false 
+                  allowTelemetryCollection: false
               - task: TerraformCLI@1
                 inputs:
                   command: 'plan'
-                  workingDirectory: '(Pipeline.Workspace)/terraform-manifests-out'
+                  workingDirectory: '$(Pipeline.Workspace)/terraform-manifests-out'
                   environmentServiceName: 'terraform-aks-azurerm-svc-con'
                   commandOptions: '-var ssh_public_key=$(sshkey.secureFilePath) -var environment=$(DEV_ENVIRONMENT) -out $(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
