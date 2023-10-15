@@ -46,16 +46,16 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     type                 = "VirtualMachineScaleSets"
     vnet_subnet_id        = azurerm_subnet.aks-default.id 
     node_labels = {
-      "nodepool-type"    = "frontend"
+      "nodepool-type"    = "system"
       "environment"      = "dev"
       "nodepoolos"       = "linux"
-      "app"              = "frontend-apps" 
+      "app"              = "system-apps" 
     } 
    tags = {
-      "nodepool-type"    = "frontend"
+      "nodepool-type"    = "system"
       "environment"      = var.environment
       "nodepoolos"       = "linux"
-      "app"              = "frontend-apps" 
+      "app"              = "system-apps" 
    } 
   }
 

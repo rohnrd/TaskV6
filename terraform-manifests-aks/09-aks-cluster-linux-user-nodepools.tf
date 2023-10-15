@@ -14,15 +14,15 @@ resource "azurerm_kubernetes_cluster_node_pool" "linux101" {
   priority              = "Regular"  
   vnet_subnet_id        = azurerm_subnet.aks-default.id
   node_labels = {
-    "nodepool-type" = "backend"
+    "nodepool-type" = "user"
     "environment"   = var.environment
     "nodepoolos"    = "linux"
-    "app"           = "backend-apps"
+    "app"           = "java-apps"
   }
   tags = {
-    "nodepool-type" = "backend"
+    "nodepool-type" = "user"
     "environment"   = var.environment
     "nodepoolos"    = "linux"
-    "app"           = "backend-apps"
+    "app"           = "java-apps"
   }
 }
