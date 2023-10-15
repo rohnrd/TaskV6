@@ -85,6 +85,5 @@ stages:
                   commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
 
-              - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)
               
               
