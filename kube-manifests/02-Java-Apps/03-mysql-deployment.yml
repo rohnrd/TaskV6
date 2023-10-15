@@ -37,4 +37,4 @@ spec:
             name: usermanagement-dbcreation-script
 # To schedule pods on based on NodeSelectors
       nodeSelector:
-        app: backend-apps            
+        app: java-apps            
