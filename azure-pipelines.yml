@@ -24,12 +24,7 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
             artifact: 'terraform-manifests-out'
             publishLocation: 'pipeline'
-        - task: PublishPipelineArtifact@1
-          inputs:
-            targetPath: '$(System.DefaultWorkingDirectory)/kube-manifests/02-Java-Apps'
-            artifact: 'terraform-manifests-java-app'
-            publishLocation: 'pipeline'
-
+        
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
@@ -89,6 +84,16 @@ stages:
                   environmentServiceName: 'terraform-aks-azurerm-svc-con'
                   commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
-              
-              
+  - stage: Build
+    jobs:
+      - job: Build
+        displayName: Build Job
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:           
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'kube-manifests-02-Java-Apps'
+              publishLocation: 'Container'
               
