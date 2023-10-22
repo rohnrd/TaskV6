@@ -91,9 +91,8 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:           
-          - task: PublishBuildArtifacts@1
+          - task: PublishPipelineArtifact@1
             inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'kube-manifests-02-Java-Apps'
-              publishLocation: 'Container'
-              
+              targetPath: '$(System.DefaultWorkingDirectory)/kube-manifests /02-Java-Apps'
+              artifact: 'kube-manifests-02-Java-Apps'
+              publishLocation: 'pipeline'
