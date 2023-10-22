@@ -6,7 +6,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-- name: Deploy-kube-manifests
+- name: Deploykubemanifests
   value: kube  
 
 stages:
