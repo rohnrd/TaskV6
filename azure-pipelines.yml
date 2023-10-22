@@ -86,16 +86,3 @@ stages:
                   environmentServiceName: 'terraform-aks-azurerm-svc-con'
                   commandOptions: '$(Pipeline.Workspace)/terraform-manifests-out/$(DEV_ENVIRONMENT)-$(Build.BuildId).out'
                   allowTelemetryCollection: false
-  - stage: Deploy-kube-manifests
-    jobs:
-      - deployment: Deploy-kube-manifests
-        pool:
-          vmImage: 'ubuntu-latest'
-        environment: $(Deploy-kube-manifests)  
-        strategy:
-          steps:           
-            - task: PublishPipelineArtifact@1
-              inputs:
-                targetPath: '$(System.DefaultWorkingDirectory)/kube-manifests/02-Java-Apps'
-                artifact: 'kube-manifests-02-Java-Apps'
-                publishLocation: 'pipeline'
