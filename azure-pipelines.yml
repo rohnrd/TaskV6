@@ -26,7 +26,7 @@ stages:
             publishLocation: 'pipeline'
         - task: PublishPipelineArtifact@1
           inputs:
-            targetPath: '(System.DefaultWorkingDirectory)/kube-manifests/02-Java-Apps'
+            targetPath: '$(System.DefaultWorkingDirectory)/kube-manifests/02-Java-Apps'
             artifact: 'terraform-manifests-java-app'
             publishLocation: 'pipeline'
 
