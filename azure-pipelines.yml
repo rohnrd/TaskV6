@@ -93,10 +93,9 @@ stages:
           vmImage: 'ubuntu-latest'
         environment: $(Deploy-kube-manifests)  
         strategy:
-          deploy:  
-            steps:           
-              - task: PublishPipelineArtifact@1
-                inputs:
-                  targetPath: '$(System.DefaultWorkingDirectory)/kube-manifests /02-Java-Apps'
-                  artifact: 'kube-manifests-02-Java-Apps'
-                  publishLocation: 'pipeline'
+          steps:           
+            - task: PublishPipelineArtifact@1
+              inputs:
+                targetPath: '$(System.DefaultWorkingDirectory)/kube-manifests /02-Java-Apps'
+                artifact: 'kube-manifests-02-Java-Apps'
+                publishLocation: 'pipeline'
