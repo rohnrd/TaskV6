@@ -16,4 +16,3 @@ stages:
       - job: Deploy-kube-manifests
         steps:
 
-'
