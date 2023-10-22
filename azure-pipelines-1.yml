@@ -13,7 +13,7 @@ stages:
   - stage: Deploy
     displayName: Deploy stage
     jobs:
-      - job: Deploy-kube-manifests
+      - job: Deploykubemanifests
         steps:
           
           - task: PublishPipelineArtifact@1
