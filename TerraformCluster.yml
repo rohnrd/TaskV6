@@ -1,0 +1,22 @@
+trigger:
+- master
+# Creating ubuntu-latest os to run this file 
+pool:
+  vmImage: ubuntu-latest
+# Declare enviromental Var  
+variables:
+- name: DEV_ENVIRONMENT
+  value: dev
+
+stages: 
+  - stage: TerraformValidate #Validate stage TerraformValidate
+    jobs: # Declare Jobs->job->steps->task  
+      - job: TerraformValidateJob  
+        continueOnError: false
+        steps:
+           # 
+         - task: PublishPipelineArtifact@1
+           inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
+            artifact: 'terraform-manifests-out'
+            publishLocation: 'pipeline'   
