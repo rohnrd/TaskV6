@@ -10,7 +10,7 @@ variables:
 
 stages: 
   - stage: TerraformValidate #Validate stage TerraformValidate
-    jobs: # Declare Jobs->job->steps->task  
+    jobs: # Declare Jobs->list of job-> list of steps->list of task  
       - job: TerraformValidateJob  
         continueOnError: false
         steps:
