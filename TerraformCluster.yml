@@ -14,9 +14,27 @@ stages:
       - job: TerraformValidateJob  
         continueOnError: false
         steps:
-           # 
-         - task: PublishPipelineArtifact@1
+         # publish the artfact to the pipeline   
+         - task: PublishPipelineArtifact@1 # pulling the pipeline code for creating cluster  
            inputs:
             targetPath: '$(System.DefaultWorkingDirectory)/terraform-manifests-aks'
             artifact: 'terraform-manifests-out'
-            publishLocation: 'pipeline'   
+            publishLocation: 'pipeline'
+         #https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/publish-pipeline-artifact-v1?view=azure-pipelines 
+
+         # Need to install terraform ubuntu-latest     
+         - task: TerraformInstaller@1
+           inputs:
+             terraformVersion: 'latest'
+         #https://marketplace.visualstudio.com/acquisition?itemName=JasonBJohnson.azure-pipelines-tasks-terraform
+         # Need to use terraform init command and store tf state file in storage account created  
+         - task: TerraformCLI@1
+           inputs:
+             command: 'init'
+             backendType: 'azurerm'
+             backendServiceArm: 'terraform-aks-azurerm-svc-con'
+             backendAzureRmResourceGroupName: 'terraformstateronrg045'
+             backendAzureRmStorageAccountName: 'terraformstoragerg045'
+             backendAzureRmContainerName: 'tfstatefiles-v45'
+             backendAzureRmKey: 'aks-base.tfstate'
+             allowTelemetryCollection: true
